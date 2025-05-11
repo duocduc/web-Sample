@@ -1,0 +1,38 @@
+<header>
+  <div class="header-nav">
+    <a href="/">静岡大学の大学生本屋 </a>
+    <p>ようこそ、<%= locals.username %>さん</p>
+    <ul>
+      <li><a href="/list">ホームページ</a></li>
+
+      <% if (locals.isLoggedIn) { %>
+      <li><a href="/campaign/<%= locals.userId %>">教科書寄付</a></li>
+      <li><a href="/messenger/<%= locals.userId %>">メッセージ</a></li>
+      <li><a href="/sell/<%= locals.userId %>">教科書販売</a></li>
+      <li><a href="/account/<%= locals.userId %>">マイアカウント</a></li>
+      <li><a href="/logout">ログアウト</a></li>
+      <% } else { %>
+      <li><a href="/signup">新規登録</a></li>
+      <li><a href="/login">ログイン</a></li>
+      <% } %>
+    </ul>
+  </div>
+  <p>静岡大学の大学生本屋</p>
+</header>
+
+<style>
+  header > p::after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 148px;
+    height: 148px;
+    bottom: -50px;
+    right: -10px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url('<%= locals.userProfileImage || "/images/default-profile.png" %>');
+    border-radius: 50%;
+    border: 3px solid #ddd;
+  }
+</style>

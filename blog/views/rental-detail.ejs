@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= rental.title %></title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <%- include('header'); %>
+    <main>
+      <div class="product-container">
+        <div class="product-image-container">
+          <% if (rental.image_path) { %>
+          <img
+            src="<%= rental.image_path %>"
+            alt="貸出本画像"
+            class="product-image"
+          />
+          <% } else { %>
+          <span>No Image Available</span>
+          <% } %>
+        </div>
+        <div class="product-details">
+          <h1><%= rental.title %></h1>
+          <div class="description"><%= rental.describe %></div>
+          <div class="button-container">
+            <% if (!locals.isLoggedIn) { %>
+            <a href="/login" class="btn login-btn">ログイン</a>
+            <% } else { %>
+            <a href="/rent/<%= rental.id %>" class="btn buy-btn">借りる</a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <a class="btn sub" href="/list">一覧にもどる</a>
+    </footer>
+  </body>
+</html>

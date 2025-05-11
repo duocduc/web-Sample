@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>BLOG</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/send_url.js"></script>
+  </head>
+  <body>
+    <%- include('header'); %>
+    <main>
+      <div class="book-section">
+        <h2 class="section-label">買える本</h2>
+        <ul class="list">
+          <% products.forEach((product) => { %>
+          <li>
+            <a href="/products/<%= product.id %>">
+              <h2><%= product.title %></h2>
+              <div class="image-container">
+                <% if (product.image_path) { %>
+                <img src="<%= product.image_path %>" alt="商品画像" />
+                <% } else { %>
+                <span>No Image</span>
+                <% } %>
+              </div>
+              <p>値段：<%= product.price %> 円</p>
+            </a>
+          </li>
+          <% }) %>
+        </ul>
+      </div>
+
+      <div class="rental-section">
+        <h2 class="section-label">貸出本</h2>
+        <ul class="list">
+          <% rentals.forEach((rental) => { %>
+          <li>
+            <a href="/rental/<%= rental.id %>">
+              <h2><%= rental.title %></h2>
+              <div class="image-container">
+                <% if (rental.image_path) { %>
+                <img src="<%= rental.image_path %>" alt="貸出本画像" />
+                <% } else { %>
+                <span>No Image</span>
+                <% } %>
+              </div>
+            </a>
+          </li>
+          <% }) %>
+        </ul>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Messenger</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <%- include('header'); %>
+    <main>
+      <div class="messenger-container">
+        <!-- Sidebar:  -->
+        <div class="messenger-sidebar">
+          <h2>静岡大学の大学生本屋メッセージ</h2>
+          <ul>
+            <% conversations.forEach((conversation) => { %>
+            <li>
+              <a
+                href="/messenger/<%= conversation.user_id %>"
+                class="<%= conversation.user_id == activeUserId ? 'messenger-active' : '' %>"
+              >
+                <div class="messenger-profile-pic">
+                  <img
+                    src="<%= conversation.profile_image || '/images/default-profile.png' %>"
+                    alt="<%= conversation.username %>"
+                    class="profile-image"
+                  />
+                </div>
+                <div class="messenger-chat-info">
+                  <p class="messenger-chat-name">
+                    <%= conversation.username %>
+                  </p>
+                </div>
+              </a>
+            </li>
+            <% }); %>
+          </ul>
+        </div>
+
+        <!-- Chat content-->
+        <div class="messenger-chat-content">
+          <% if (activeConversation) { %>
+          <div class="messenger-chat-header">
+            <h2><%= activeConversation.username %></h2>
+          </div>
+          <div class="messenger-messages">
+            <% messages.forEach((msg) => { %>
+            <div
+              class="<%= msg.sender_id == currentUserId ? 'messenger-sent' : 'messenger-received' %>"
+            >
+              <p class="messenger-message-content"><%= msg.message %></p>
+              <span class="messenger-message-time"><%= msg.created_at %></span>
+            </div>
+            <% }); %>
+          </div>
+          <form
+            class="messenger-form"
+            action="/messenger/<%= activeConversation.user_id %>"
+            method="POST"
+          >
+            <textarea name="message" placeholder="Aa" required></textarea>
+            <button type="submit">送信</button>
+          </form>
+          <% } else { %>
+          <p class="messenger-no-chat">
+            会話を選択してメッセージを開始してください
+          </p>
+          <% } %>
+        </div>
+      </div>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const messagesContainer = document.querySelector(".messenger-messages");
+        const inputField = document.querySelector(".messenger-form textarea");
+
+        if (messagesContainer) {
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        if (inputField) {
+          inputField.focus();
+
+          inputField.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              document.querySelector(".messenger-form").submit();
+            }
+          });
+        }
+
+        const fetchPageContent = () => {
+          fetch(window.location.href)
+            .then((response) => response.text())
+            .then((html) => {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, "text/html");
+
+              const newMessages = doc.querySelector(
+                ".messenger-messages"
+              ).innerHTML;
+              const newSidebar =
+                doc.querySelector(".messenger-sidebar").innerHTML;
+
+              document.querySelector(".messenger-messages").innerHTML =
+                newMessages;
+              document.querySelector(".messenger-sidebar").innerHTML =
+                newSidebar;
+
+              messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            })
+            .catch((err) => console.error("Error fetching page content:", err));
+        };
+
+        setInterval(fetchPageContent, 2000);
+      });
+    </script>
+  </body>
+</html>

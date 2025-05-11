@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>記事の編集</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="sign">
+        <div class="container">
+            <h1><a href="/list">ブログ</a></h1>
+            <div class="panel">
+                <h2>記事を編集</h2>
+                <form action="/article/edit/<%= article.id %>" method="POST" enctype="multipart/form-data">
+                    <p>タイトル:</p>
+                    <input type="text" name="title" value="<%= article.title %>" required><br />
+                    
+                    <p>概要:</p>
+                    <input type="text" name="summary" value="<%= article.summary %>" required><br />
+
+                    <p>記事の内容:</p>
+                    <textarea name="content" required><%= article.content %></textarea><br />
+
+                    <p>カテゴリー:</p>
+                    <select name="category" required>
+                        <option value="all" <% if (article.category === 'all') { %>selected<% } %>>全体公開 (All)</option>
+                        <option value="limited" <% if (article.category === 'limited') { %>selected<% } %>>会員限定 (Limited)</option>
+                    </select>
+                    <br />
+
+                    <p>現在の画像:</p>
+                    <% if (article.image_path) { %>
+                        <img src="<%= article.image_path %>" alt="記事の画像" style="max-width: 300px;">
+                    <% } else { %>
+                        <p>画像がありません。</p>
+                    <% } %>
+
+                    <p>新しい画像をアップロード (任意):</p>
+                    <input type="file" name="image" accept="image/*"><br />
+
+                    <input type="submit" value="記事を更新する">
+                    <a href="/list">一覧に戻る</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

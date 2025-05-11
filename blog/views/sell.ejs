@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>新しい商品を販売</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="sign">
+      <div class="container">
+        <h1><a href="/list">教科書販売</a></h1>
+        <div class="panel">
+          <h2>新しい商品を販売</h2>
+          <% if (errors.length > 0) { %>
+          <ul class="errors">
+            <% errors.forEach(error => { %>
+            <li><%= error %></li>
+            <% }); %>
+          </ul>
+          <% } %>
+          <form
+            action="/sell/<%= sellerId %>"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <p>商品名</p>
+            <input type="text" name="title" required />
+            <p>商品説明</p>
+            <textarea name="describe" required></textarea>
+            <p>価格</p>
+            <input type="number" name="price" required />
+            <input type="hidden" name="seller_id" value="<%= sellerId %>" />
+            <p>商品画像をアップロード (最大3枚)</p>
+            <input
+              type="file"
+              name="images"
+              accept="image/*"
+              multiple
+              required
+            />
+            <input type="submit" value="商品を登録する" />
+          </form>
+        </div>
+        <p>
+          <a href="/account/<%= locals.userId %>">マイアカウントページに戻る</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
